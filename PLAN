@@ -1,6 +1,7 @@
 To improve:
 1) Read about DC to fully understand how it works
-2) Try to replace OpenGL with winapi graphics to avoid recoding RGB to BGR (for perfomance).
+2) Replace OpenGL with winapi graphics to avoid recoding RGB to BGR (for perfomance).
+3) TRY to replace GetDIBits with something else not copying bitmap
 
 To add:
 1) Sending screenshots over sockets
