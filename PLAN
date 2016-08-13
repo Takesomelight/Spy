@@ -1,0 +1,7 @@
+To improve:
+1) Read about DC to fully understand how it works
+2) Try to replace OpenGL with winapi graphics to avoid recoding RGB to BGR (for perfomance).
+
+To add:
+1) Sending screenshots over sockets
+2) Add remote control: mouse and keyboard
