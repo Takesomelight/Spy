@@ -1,3 +1,12 @@
 To add:
 1) Sending screenshots over sockets
 2) Remote control: mouse and keyboard
+
+Steps:
+1) Write Slave (client)
+  a) Take screenshot
+  b) Send it
+  
+2) Write Master (Server)
+  a) Receive screenshot
+  b) Show it
