@@ -1,7 +1,3 @@
-To improve:
-1) Replace OpenGL with winapi graphics to avoid recoding RGB to BGR (for perfomance).
-2) TRY to replace GetDIBits with something else not copying bitmap // getobject -> bitmap
-
 To add:
 1) Sending screenshots over sockets
 2) Remote control: mouse and keyboard
