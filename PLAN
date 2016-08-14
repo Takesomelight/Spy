@@ -1,12 +1,16 @@
+SOCKET ACCEPT MULTI
+
 To add:
 1) Sending screenshots over sockets
 2) Remote control: mouse and keyboard
 
 Steps:
-1) Write Slave (client)
-  a) Take screenshot
-  b) Send it
+1) Write Slave (server)
+  a) Send screenshots caps
+  b) Take screenshot
+  c) Send it
   
-2) Write Master (Server)
-  a) Receive screenshot
-  b) Show it
+2) Write Master (client)
+  a) Receive screenshot caps
+  b) Receive screenshot
+  c) Show it
