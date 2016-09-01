@@ -10,15 +10,14 @@
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
 
+
 #pragma comment(lib, "Ws2_32.lib")
 
 #define PORT "29898"
-#define ADDR "127.0.0.1"
+#define ADDR "192.168.1.103"
 
 SOCKET create_client_socket(char* server_addr, char* server_port)
 {
-	
-
 	struct addrinfo  *result = NULL;
 	int iResult = getaddrinfo(server_addr, server_port, NULL, &result);
 	if (iResult != 0) 
@@ -46,6 +45,21 @@ SOCKET create_client_socket(char* server_addr, char* server_port)
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+
+
+inline bool recv(SOCKET client_socket, char* data, int size)
+{
+	int recivied;
+	while (size > 0)
+	{
+		recivied = recv(client_socket, data, size, 0);
+		if (0 == recivied)
+			return false;
+		data += recivied;
+		size -= recivied;
+	}
+	return true;
 }
 
 int CALLBACK WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int show_code)
@@ -97,9 +111,7 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_
 	HWND win = CreateWindowW(class_name, L"SPY", WS_OVERLAPPEDWINDOW, 50, 50, w, h, NULL, NULL, instance, 0);
 
 	HDC hWin = GetDC(win);
-	HBITMAP hBitmap = CreateCompatibleBitmap(hWin, w, h);
-	HDC hMemory = CreateCompatibleDC(hWin);
-	SelectObject(hMemory, hBitmap);
+
 	BITMAPINFOHEADER bmi;
 	bmi = { 0 };
 	bmi.biSize = sizeof(BITMAPINFOHEADER);
@@ -112,15 +124,17 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_
 	
 	ShowWindow(win, show_code);
 	MSG msg;
+	FILE* f = fopen("log.txt", "w");
+	fprintf(f, "%d, %d\n", w, h);
+	fclose(f);
 	int size = 3 * w * h;
 	char* screen_data = (char*) malloc( size );
 
-	while ( ( iResult = recv(slave_socket, (char*)screen_data, size, 0) ) > 0 )
+	while ( recv( slave_socket, screen_data, size ) )
 	{
 		if (PeekMessage(&msg, win, 0, 0, PM_REMOVE))
 			DispatchMessage(&msg);
-		SetDIBits(hMemory, hBitmap, 0, h, screen_data, (BITMAPINFO*)&bmi, DIB_RGB_COLORS);
-		BitBlt(hWin, 0, 0, w, h, hMemory, 0, 0, SRCCOPY);
+		StretchDIBits(hWin, 0, 0, w, h, 0, 0, w, h, screen_data, (BITMAPINFO*)&bmi, DIB_RGB_COLORS, SRCCOPY);
 	}
 
 
